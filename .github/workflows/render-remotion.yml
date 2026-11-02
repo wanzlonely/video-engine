@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       composition:
-        description: "Composition id"
+        description: "Composition id (Virga atau Zanzibar)"
         required: true
-        default: "Zanzibar"
+        default: "Virga"
       quality:
         description: "CRF"
         required: false
@@ -28,10 +28,12 @@ jobs:
           node-version: "20"
       - working-directory: remotion
         run: npm install
-      - working-directory: remotion
+      - name: Render
+        working-directory: remotion
         run: |
           mkdir -p out
-          npx remotion render src/index.ts ${{ inputs.composition || 'Zanzibar' }} out/zanzibar.mp4 --codec=h264 --crf=${{ inputs.quality || '18' }}
+          COMP="${{ github.event.inputs.composition || 'Virga' }}"
+          npx remotion render src/index.ts "$COMP" "out/${COMP}.mp4" --codec=h264 --crf=${{ github.event.inputs.quality || '18' }}
       - uses: actions/upload-artifact@v4
         with:
           name: remotion-video
