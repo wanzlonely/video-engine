@@ -1,0 +1,130 @@
+{
+  "meta": {
+    "judul": "Rahasia Perpustakaan Alexandria",
+    "durasiTotal": 23,
+    "fps": 30,
+    "width": 1080,
+    "height": 1920
+  },
+  "narasiText": "Perpustakaan Alexandria tidak pernah benar-benar hilang seperti yang kamu kira. Sebagian besar koleksinya diselamatkan jauh sebelum kebakaran besar. Mitos kehancurannya jauh lebih dramatis dari faktanya.",
+  "scenes": [
+    {
+      "id": "scene-intro",
+      "type": "sky",
+      "start": 0,
+      "duration": 5,
+      "background": {
+        "gradient": ["#1B2735", "#090A0F"]
+      }
+    },
+    {
+      "id": "scene-title",
+      "type": "text",
+      "start": 0.3,
+      "duration": 4.5,
+      "text": {
+        "content": "Perpustakaan Alexandria Tidak Pernah Hilang",
+        "x": 50,
+        "y": 50,
+        "size": 72,
+        "color": "#FFFFFF"
+      }
+    },
+    {
+      "id": "scene-city",
+      "type": "building",
+      "start": 5,
+      "duration": 6,
+      "background": {
+        "gradient": ["#141C2E", "#05070C"]
+      },
+      "transitionIn": { "type": "fade", "duration": 0.6 }
+    },
+    {
+      "id": "scene-city-text",
+      "type": "text",
+      "start": 5.5,
+      "duration": 5,
+      "text": {
+        "content": "Sebagian besar koleksinya diselamatkan jauh sebelum kebakaran besar",
+        "x": 50,
+        "y": 75,
+        "size": 48,
+        "color": "#FFD60A"
+      }
+    },
+    {
+      "id": "scene-fire",
+      "type": "fire",
+      "start": 11,
+      "duration": 7,
+      "transitionIn": { "type": "wipe", "duration": 0.5 }
+    },
+    {
+      "id": "scene-scholar",
+      "type": "character",
+      "start": 18,
+      "duration": 5,
+      "background": {
+        "gradient": ["#2A2015", "#0C0906"]
+      },
+      "characters": [
+        {
+          "id": "scholar-1",
+          "asset": "public/characters/scholar-human.png",
+          "x": 50,
+          "y": 60,
+          "scale": 1
+        }
+      ],
+      "text": {
+        "content": "Seorang pustakawan menyelamatkan ribuan gulungan",
+        "x": 8,
+        "y": 18,
+        "size": 46,
+        "color": "#FFFFFF"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.7 }
+    },
+    {
+      "id": "scene-fire-text",
+      "type": "text",
+      "start": 11.5,
+      "duration": 6,
+      "text": {
+        "content": "Mitos kehancurannya jauh lebih dramatis dari faktanya",
+        "x": 50,
+        "y": 22,
+        "size": 52,
+        "color": "#FFFFFF"
+      }
+    }
+  ],
+  "subtitles": [
+    { "text": "Perpustakaan", "start": 0.3, "end": 0.8 },
+    { "text": "Alexandria", "start": 0.8, "end": 1.3 },
+    { "text": "tidak", "start": 1.3, "end": 1.6 },
+    { "text": "pernah", "start": 1.6, "end": 1.9 },
+    { "text": "benar-benar", "start": 1.9, "end": 2.4 },
+    { "text": "hilang", "start": 2.4, "end": 2.9 },
+    { "text": "seperti", "start": 2.9, "end": 3.3 },
+    { "text": "yang", "start": 3.3, "end": 3.5 },
+    { "text": "kamu", "start": 3.5, "end": 3.8 },
+    { "text": "kira", "start": 3.8, "end": 4.2 },
+    { "text": "sebagian", "start": 5.5, "end": 6 },
+    { "text": "besar", "start": 6, "end": 6.4 },
+    { "text": "koleksinya", "start": 6.4, "end": 7 },
+    { "text": "diselamatkan", "start": 7, "end": 7.7 },
+    { "text": "jauh", "start": 7.7, "end": 8 },
+    { "text": "sebelum", "start": 8, "end": 8.4 },
+    { "text": "kebakaran", "start": 8.4, "end": 9 },
+    { "text": "besar", "start": 9, "end": 9.5 },
+    { "text": "mitos", "start": 11.5, "end": 12 },
+    { "text": "kehancurannya", "start": 12, "end": 12.8 },
+    { "text": "jauh", "start": 12.8, "end": 13.1 },
+    { "text": "lebih", "start": 13.1, "end": 13.4 },
+    { "text": "dramatis", "start": 13.4, "end": 14 },
+    { "text": "dari", "start": 14, "end": 14.3 },
+    { "text": "faktanya", "start": 14.3, "end": 14.9 }
+  ]
+}
