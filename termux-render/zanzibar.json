@@ -1,1 +1,210 @@
-PLACEHOLDER
+{
+  "meta": {
+    "judul": "Perang Terpendek dalam Sejarah",
+    "durasiTotal": 52,
+    "fps": 30,
+    "width": 1080,
+    "height": 1920
+  },
+  "narasiText": "Pernah membayangkan sebuah perang yang bahkan tidak berlangsung selama satu jam? Pada tahun 1896, sebuah konflik terjadi di Zanzibar, wilayah di pesisir Afrika Timur yang sekarang menjadi bagian dari Tanzania. Semuanya bermula ketika Sultan Zanzibar meninggal dunia. Khalid bin Barghash mengambil alih takhta dan menyatakan dirinya penguasa baru. Namun Inggris, yang saat itu memiliki kendali kuat atas Zanzibar, tidak menyetujui. Inggris menginginkan penguasa lain yang lebih mudah dikendalikan. Khalid menolak menyerahkan kekuasaan. Pada pagi 27 Agustus 1896, Inggris mengirim ultimatum: Khalid harus meninggalkan istana sebelum pukul sembilan. Khalid memilih bertahan. Tepat pukul sembilan, meriam Inggris menembaki istana. Dalam hitungan menit, pertahanan Zanzibar runtuh. Khalid melarikan diri ke konsulat Jerman. Sekitar 38 menit setelah perang dimulai, tembakan berhenti. Perang Inggris-Zanzibar menjadi perang terpendek dalam sejarah. Sekitar 500 orang dari pihak Zanzibar tewas atau terluka, sementara hanya satu pelaut Inggris yang terluka. Sebuah perang yang mengubah sejarah, berakhir bahkan sebelum banyak orang menyadari bahwa perang itu telah dimulai.",
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "sky",
+      "start": 0,
+      "duration": 5.5,
+      "background": { "gradient": ["#0A1020", "#04060C"] },
+      "text": {
+        "content": "Perang yang tidak sampai\nsatu jam?",
+        "x": 50,
+        "y": 46,
+        "size": 54,
+        "color": "#FFFFFF"
+      }
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "start": 5,
+      "duration": 4.5,
+      "background": { "gradient": ["#12182A", "#070A12"] },
+      "text": {
+        "content": "Perang Inggris–Zanzibar",
+        "x": 50,
+        "y": 44,
+        "size": 50,
+        "color": "#FFD60A"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.6 }
+    },
+    {
+      "id": "year",
+      "type": "text",
+      "start": 7.5,
+      "duration": 3.5,
+      "text": {
+        "content": "1896",
+        "x": 50,
+        "y": 62,
+        "size": 72,
+        "color": "#FFFFFF"
+      }
+    },
+    {
+      "id": "setting",
+      "type": "building",
+      "start": 10.5,
+      "duration": 6.5,
+      "background": { "gradient": ["#162033", "#080B12"] },
+      "text": {
+        "content": "Zanzibar, Afrika Timur",
+        "x": 50,
+        "y": 78,
+        "size": 38,
+        "color": "#E8E8E8"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.5 }
+    },
+    {
+      "id": "sultan-dies",
+      "type": "text",
+      "start": 16.5,
+      "duration": 5,
+      "background": { "gradient": ["#1A1520", "#0A080C"] },
+      "text": {
+        "content": "Sultan meninggal.\nKhalid naik takhta.",
+        "x": 50,
+        "y": 48,
+        "size": 46,
+        "color": "#FFFFFF"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.5 }
+    },
+    {
+      "id": "britain-rejects",
+      "type": "sky",
+      "start": 21,
+      "duration": 5.5,
+      "background": { "gradient": ["#1C1528", "#0A0810"] },
+      "text": {
+        "content": "Inggris menolak.\nKhalid bertahan.",
+        "x": 50,
+        "y": 46,
+        "size": 48,
+        "color": "#FFD60A"
+      },
+      "transitionIn": { "type": "wipe", "duration": 0.45 }
+    },
+    {
+      "id": "ultimatum",
+      "type": "text",
+      "start": 26,
+      "duration": 5.5,
+      "background": { "gradient": ["#2A1810", "#0E0906"] },
+      "text": {
+        "content": "Ultimatum:\nturun sebelum jam 9",
+        "x": 50,
+        "y": 48,
+        "size": 46,
+        "color": "#FFFFFF"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.5 }
+    },
+    {
+      "id": "bombardment",
+      "type": "fire",
+      "start": 31,
+      "duration": 8,
+      "text": {
+        "content": "Meriam Inggris menyala",
+        "x": 50,
+        "y": 20,
+        "size": 44,
+        "color": "#FFFFFF"
+      },
+      "transitionIn": { "type": "wipe", "duration": 0.4 }
+    },
+    {
+      "id": "thirty-eight",
+      "type": "text",
+      "start": 38.5,
+      "duration": 5.5,
+      "background": { "gradient": ["#12151E", "#06070A"] },
+      "text": {
+        "content": "38 menit.\nSelesai.",
+        "x": 50,
+        "y": 48,
+        "size": 58,
+        "color": "#FFD60A"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.6 }
+    },
+    {
+      "id": "cost",
+      "type": "building",
+      "start": 43.5,
+      "duration": 4.5,
+      "background": { "gradient": ["#151820", "#07080C"] },
+      "text": {
+        "content": "~500 korban di pihak Zanzibar",
+        "x": 50,
+        "y": 48,
+        "size": 40,
+        "color": "#E0E0E0"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.5 }
+    },
+    {
+      "id": "closing",
+      "type": "sky",
+      "start": 47.5,
+      "duration": 4.5,
+      "background": { "gradient": ["#0A0C14", "#030408"] },
+      "text": {
+        "content": "Perang terpendek\ndalam sejarah",
+        "x": 50,
+        "y": 46,
+        "size": 50,
+        "color": "#FFFFFF"
+      },
+      "transitionIn": { "type": "fade", "duration": 0.7 }
+    }
+  ],
+  "subtitles": [
+    { "text": "Pernah", "start": 0.2, "end": 0.5 },
+    { "text": "membayangkan", "start": 0.5, "end": 1.1 },
+    { "text": "perang", "start": 1.5, "end": 1.9 },
+    { "text": "tak", "start": 2.1, "end": 2.3 },
+    { "text": "sampai", "start": 2.3, "end": 2.7 },
+    { "text": "satu", "start": 2.7, "end": 3.0 },
+    { "text": "jam?", "start": 3.0, "end": 3.5 },
+    { "text": "Zanzibar", "start": 5.8, "end": 6.5 },
+    { "text": "1896", "start": 7.8, "end": 8.6 },
+    { "text": "Afrika", "start": 11.0, "end": 11.5 },
+    { "text": "Timur", "start": 11.5, "end": 12.0 },
+    { "text": "Sultan", "start": 16.8, "end": 17.3 },
+    { "text": "meninggal", "start": 17.3, "end": 18.0 },
+    { "text": "Khalid", "start": 18.3, "end": 18.8 },
+    { "text": "naik", "start": 18.8, "end": 19.1 },
+    { "text": "takhta", "start": 19.1, "end": 19.7 },
+    { "text": "Inggris", "start": 21.4, "end": 22.0 },
+    { "text": "menolak", "start": 22.0, "end": 22.7 },
+    { "text": "Khalid", "start": 23.2, "end": 23.7 },
+    { "text": "bertahan", "start": 23.7, "end": 24.4 },
+    { "text": "Ultimatum", "start": 26.4, "end": 27.2 },
+    { "text": "jam", "start": 28.2, "end": 28.5 },
+    { "text": "sembilan", "start": 28.5, "end": 29.3 },
+    { "text": "Meriam", "start": 31.4, "end": 31.9 },
+    { "text": "Inggris", "start": 31.9, "end": 32.5 },
+    { "text": "menyala", "start": 32.5, "end": 33.2 },
+    { "text": "38", "start": 39.0, "end": 39.5 },
+    { "text": "menit", "start": 39.5, "end": 40.1 },
+    { "text": "Selesai", "start": 40.5, "end": 41.3 },
+    { "text": "500", "start": 44.0, "end": 44.5 },
+    { "text": "korban", "start": 44.5, "end": 45.1 },
+    { "text": "Perang", "start": 48.0, "end": 48.5 },
+    { "text": "terpendek", "start": 48.5, "end": 49.3 },
+    { "text": "dalam", "start": 49.3, "end": 49.6 },
+    { "text": "sejarah", "start": 49.6, "end": 50.5 }
+  ]
+}
