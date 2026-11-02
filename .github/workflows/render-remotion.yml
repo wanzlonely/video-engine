@@ -8,13 +8,9 @@ on:
         required: true
         default: "Virga"
       quality:
-        description: "CRF"
+        description: "CRF (lebih kecil = lebih bagus)"
         required: false
         default: "18"
-  push:
-    paths:
-      - "remotion/**"
-      - ".github/workflows/render-remotion.yml"
 
 jobs:
   render:
@@ -23,20 +19,33 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - working-directory: remotion
+
+      - name: Install dependencies
+        working-directory: remotion
         run: npm install
-      - name: Render
+
+      - name: Render video
         working-directory: remotion
         run: |
           mkdir -p out
-          COMP="${{ github.event.inputs.composition || 'Virga' }}"
-          npx remotion render src/index.ts "$COMP" "out/${COMP}.mp4" --codec=h264 --crf=${{ github.event.inputs.quality || '18' }}
-      - uses: actions/upload-artifact@v4
+          COMP="${{ inputs.composition }}"
+          npx remotion render src/index.ts "$COMP" "out/${COMP}.mp4" \
+            --codec=h264 \
+            --crf=${{ inputs.quality }}
+
+      - name: Upload MP4
+        uses: actions/upload-artifact@v4
         with:
           name: remotion-video
           path: remotion/out/*.mp4
           if-no-files-found: error
           retention-days: 14
+
+      - name: Summary
+        run: |
+          echo "## Remotion Render Selesai" >> $GITHUB_STEP_SUMMARY
+          ls -lah remotion/out/ >> $GITHUB_STEP_SUMMARY || true
