@@ -78,7 +78,7 @@ export interface Naskah {
   meta: NaskahMeta;
   subtitles: SubtitleWord[];
   scenes: Scene[];
-  /** teks narasi penuh (bukan dipecah per-kata) — sumber untuk TTS, lihat tts.js */
+  /** teks narasi penuh (bukan dipecah per-kata) - sumber untuk TTS, lihat tts.js */
   narasiText?: string;
   /** path/URL audio hasil TTS, dipasang otomatis oleh tts.js setelah generate */
   narasiAudio?: string;
