@@ -1,12 +1,12 @@
 {
   "meta": {
     "judul": "Perang Terpendek dalam Sejarah",
-    "durasiTotal": 52,
+    "durasiTotal": 55,
     "fps": 30,
     "width": 1080,
     "height": 1920
   },
-  "narasiText": "Pernah membayangkan sebuah perang yang bahkan tidak berlangsung selama satu jam? Pada tahun 1896, sebuah konflik terjadi di Zanzibar, wilayah di pesisir Afrika Timur yang sekarang menjadi bagian dari Tanzania. Semuanya bermula ketika Sultan Zanzibar meninggal dunia. Khalid bin Barghash mengambil alih takhta dan menyatakan dirinya penguasa baru. Namun Inggris, yang saat itu memiliki kendali kuat atas Zanzibar, tidak menyetujui. Inggris menginginkan penguasa lain yang lebih mudah dikendalikan. Khalid menolak menyerahkan kekuasaan. Pada pagi 27 Agustus 1896, Inggris mengirim ultimatum: Khalid harus meninggalkan istana sebelum pukul sembilan. Khalid memilih bertahan. Tepat pukul sembilan, meriam Inggris menembaki istana. Dalam hitungan menit, pertahanan Zanzibar runtuh. Khalid melarikan diri ke konsulat Jerman. Sekitar 38 menit setelah perang dimulai, tembakan berhenti. Perang Inggris-Zanzibar menjadi perang terpendek dalam sejarah. Sekitar 500 orang dari pihak Zanzibar tewas atau terluka, sementara hanya satu pelaut Inggris yang terluka. Sebuah perang yang mengubah sejarah, berakhir bahkan sebelum banyak orang menyadari bahwa perang itu telah dimulai.",
+  "narasiText": "Pernah membayangkan sebuah perang yang bahkan tidak berlangsung selama satu jam? Pada tahun 1896, sebuah konflik terjadi di Zanzibar, sebuah wilayah di pesisir Afrika Timur yang sekarang menjadi bagian dari Tanzania. Semuanya bermula ketika Sultan Zanzibar meninggal dunia. Seorang pria bernama Khalid bin Barghash kemudian mengambil alih takhta dan menyatakan dirinya sebagai penguasa baru. Namun, ada satu masalah besar. Inggris, yang saat itu memiliki kendali kuat atas Zanzibar, tidak menyetujui pengangkatannya. Inggris menginginkan penguasa lain yang lebih mudah mereka kendalikan. Khalid menolak menyerahkan kekuasaannya. Pada pagi hari tanggal 27 Agustus 1896, Inggris mengirimkan ultimatum. Khalid harus meninggalkan istana dan menurunkan benderanya sebelum pukul sembilan pagi. Namun, Khalid memilih bertahan. Ia mengumpulkan pasukannya dan mempersiapkan pertahanan di dalam istana. Sementara itu, kapal-kapal perang Inggris telah bersiap di pelabuhan. Tepat pukul sembilan pagi, waktu ultimatum berakhir. Meriam-meriam Inggris mulai menembaki istana. Dalam hitungan menit, bangunan istana mengalami kerusakan parah. Pertahanan Zanzibar tidak mampu menandingi kekuatan armada Inggris. Khalid akhirnya melarikan diri dan mencari perlindungan di konsulat Jerman. Sekitar 38 menit setelah perang dimulai, tembakan berhenti. Bendera Sultan diturunkan, dan Inggris berhasil mengambil alih keadaan. Konflik ini kemudian dikenal sebagai Perang Inggris-Zanzibar, yang sering disebut sebagai perang terpendek dalam sejarah. Meskipun hanya berlangsung sekitar 38 menit, dampaknya sangat mengerikan. Sekitar 500 orang dari pihak Zanzibar dilaporkan tewas atau terluka, sementara hanya satu pelaut Inggris yang mengalami luka-luka. Kisah ini bukan sekadar tentang perang yang berlangsung sangat singkat. Ini adalah kisah tentang bagaimana kekuatan sebuah imperium dapat menentukan nasib sebuah negara. Dan yang paling mengejutkan: sebuah perang yang mengubah sejarah Zanzibar, ternyata dapat berakhir bahkan sebelum kebanyakan orang menyadari bahwa perang itu telah dimulai.",
   "scenes": [
     {
       "id": "hook",
@@ -29,7 +29,7 @@
       "duration": 4.5,
       "background": { "gradient": ["#12182A", "#070A12"] },
       "text": {
-        "content": "Perang Inggris–Zanzibar",
+        "content": "Perang Inggris\u2013Zanzibar",
         "x": 50,
         "y": 44,
         "size": 50,
@@ -143,7 +143,7 @@
       "id": "cost",
       "type": "building",
       "start": 43.5,
-      "duration": 4.5,
+      "duration": 5,
       "background": { "gradient": ["#151820", "#07080C"] },
       "text": {
         "content": "~500 korban di pihak Zanzibar",
@@ -157,8 +157,8 @@
     {
       "id": "closing",
       "type": "sky",
-      "start": 47.5,
-      "duration": 4.5,
+      "start": 48,
+      "duration": 7,
       "background": { "gradient": ["#0A0C14", "#030408"] },
       "text": {
         "content": "Perang terpendek\ndalam sejarah",
@@ -200,11 +200,11 @@
     { "text": "38", "start": 39.0, "end": 39.5 },
     { "text": "menit", "start": 39.5, "end": 40.1 },
     { "text": "Selesai", "start": 40.5, "end": 41.3 },
-    { "text": "500", "start": 44.0, "end": 44.5 },
-    { "text": "korban", "start": 44.5, "end": 45.1 },
-    { "text": "Perang", "start": 48.0, "end": 48.5 },
-    { "text": "terpendek", "start": 48.5, "end": 49.3 },
-    { "text": "dalam", "start": 49.3, "end": 49.6 },
-    { "text": "sejarah", "start": 49.6, "end": 50.5 }
+    { "text": "500", "start": 44.2, "end": 44.7 },
+    { "text": "korban", "start": 44.7, "end": 45.3 },
+    { "text": "Perang", "start": 48.5, "end": 49.0 },
+    { "text": "terpendek", "start": 49.0, "end": 49.8 },
+    { "text": "dalam", "start": 49.8, "end": 50.1 },
+    { "text": "sejarah", "start": 50.1, "end": 51.2 }
   ]
 }
