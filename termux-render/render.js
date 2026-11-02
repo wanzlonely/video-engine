@@ -79,11 +79,11 @@ function makeEmbers(count, seed) {
 const starCache = new Map();
 const emberCache = new Map();
 function starsFor(id) {
-  if (!starCache.has(id)) starCache.set(id, makeStars(90, id.split("").reduce((a, c) => a + c.charCodeAt(0), 7)));
+  if (!starCache.has(id)) starCache.set(id, makeStars(120, id.split("").reduce((a, c) => a + c.charCodeAt(0), 7)));
   return starCache.get(id);
 }
 function embersFor(id) {
-  if (!emberCache.has(id)) emberCache.set(id, makeEmbers(70, id.split("").reduce((a, c) => a + c.charCodeAt(0), 11)));
+  if (!emberCache.has(id)) emberCache.set(id, makeEmbers(110, id.split("").reduce((a, c) => a + c.charCodeAt(0), 11)));
   return emberCache.get(id);
 }
 
@@ -106,9 +106,11 @@ function drawStars(ctx, id, t, alpha = 1) {
   ctx.save();
   ctx.globalAlpha = alpha;
   for (const st of starsFor(id)) {
-    const tw = 0.45 + 0.55 * Math.sin(t * 2.1 + st.tw);
+    const tw = 0.35 + 0.65 * Math.sin(t * 2.4 + st.tw);
+    const dx = Math.sin(t * 0.15 + st.tw) * 3;
+    const dy = Math.cos(t * 0.12 + st.tw * 0.7) * 2;
     ctx.beginPath();
-    ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+    ctx.arc(st.x + dx, st.y + dy, st.r * (0.85 + 0.3 * tw), 0, Math.PI * 2);
     ctx.fillStyle = `rgba(255,255,255,${st.a * tw})`;
     ctx.fill();
   }
@@ -125,11 +127,11 @@ function drawSea(ctx, baseY, t) {
   ctx.strokeStyle = "rgba(120,180,220,0.12)";
   ctx.lineWidth = 2;
   for (let i = 0; i < 5; i++) {
-    const y = baseY + 18 + i * 28 + Math.sin(t * 1.2 + i) * 4;
+    const y = baseY + 18 + i * 28 + Math.sin(t * 1.6 + i) * 6;
     ctx.beginPath();
     ctx.moveTo(0, y);
     for (let x = 0; x <= W; x += 40) {
-      ctx.lineTo(x, y + Math.sin(x * 0.02 + t + i) * 5);
+      ctx.lineTo(x, y + Math.sin(x * 0.018 + t * 1.3 + i) * 7);
     }
     ctx.stroke();
   }
@@ -256,7 +258,7 @@ function drawClock(ctx, cx, cy, r, progress, alpha) {
 }
 
 function drawBlast(ctx, cx, cy, t, power) {
-  const pulse = 0.6 + 0.4 * Math.sin(t * 6);
+  const pulse = 0.55 + 0.45 * Math.sin(t * 7.5);
   const rad = power * pulse;
   const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
   g.addColorStop(0, "rgba(255,240,180,0.55)");
@@ -330,7 +332,7 @@ function visSetting(ctx, scene, localT, t) {
 function visSultan(ctx, scene, localT, t) {
   fillGradient(ctx, ["#1a1220", "#0c0810", "#060408"], 0, H);
   const a = clamp(localT / 0.7, 0, 1);
-  drawCrown(ctx, W / 2, H * 0.28, 140, 0.9 * a);
+  drawCrown(ctx, W / 2, H * 0.28 + Math.sin(t * 1.4) * 8, 140, 0.9 * a);
   const g = ctx.createRadialGradient(W / 2, H * 0.28, 0, W / 2, H * 0.28, 180);
   g.addColorStop(0, "rgba(255,200,60,0.2)");
   g.addColorStop(1, "rgba(0,0,0,0)");
@@ -374,7 +376,7 @@ function visUltimatum(ctx, scene, localT, t) {
   const progress = clamp(localT / scene.duration, 0, 1);
   drawClock(ctx, W / 2, H * 0.32, 130, progress, 0.95);
   const g = ctx.createRadialGradient(W / 2, H * 0.32, 0, W / 2, H * 0.32, 220);
-  g.addColorStop(0, `rgba(255,80,40,${0.12 + 0.08 * Math.sin(t * 4)})`);
+  g.addColorStop(0, `rgba(255,80,40,${0.15 + 0.12 * Math.sin(t * 5.5)})`);
   g.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
@@ -387,14 +389,21 @@ function visFire(ctx, scene, localT, t) {
   drawBlast(ctx, W * 0.35, H * 0.55, t * 1.3 + 1, 160);
   drawBlast(ctx, W * 0.65, H * 0.52, t * 0.9 + 2, 180);
   for (const e of embersFor(scene.id)) {
-    const life = (t * e.speed + e.phase) % 3.2;
-    const y = e.y - life * 100;
-    const a = clamp(1 - life / 3.2, 0, 1) * 0.95;
-    const r = e.r * (0.65 + 0.35 * Math.sin(t * 5 + e.phase));
+    const life = (t * e.speed * 1.15 + e.phase) % 3.5;
+    const y = e.y - life * 130;
+    const a = clamp(1 - life / 3.5, 0, 1) * 0.95;
+    const r = e.r * (0.7 + 0.45 * Math.sin(t * 6 + e.phase));
+    const x = e.x + Math.sin(t * 2.4 + e.phase) * 22;
     ctx.beginPath();
-    ctx.arc(e.x + Math.sin(t * 2 + e.phase) * 14, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(${e.hue},100%,58%,${a})`;
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${e.hue},100%,60%,${a})`;
     ctx.fill();
+    if (a > 0.4) {
+      ctx.beginPath();
+      ctx.arc(x, y + r * 2.5, r * 0.35, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${e.hue + 20},100%,70%,${a * 0.5})`;
+      ctx.fill();
+    }
   }
   ctx.fillStyle = "rgba(8,4,4,0.95)";
   const baseY = H * 0.72;
