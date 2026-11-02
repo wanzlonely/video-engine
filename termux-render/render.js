@@ -1,27 +1,19 @@
 #!/usr/bin/env node
 /**
- * Termux 2D Video Renderer
- * Membaca naskah JSON → frame PNG → MP4 via ffmpeg
- *
- * Usage:
- *   node render.js [naskah.json]
- *   node render.js zanzibar.json
+ * Termux / GitHub Actions 2D Video Renderer
+ * Usage: node render.js [naskah.json]
  */
 
 const fs = require("fs");
 const path = require("path");
-const { execSync, spawnSync } = require("child_process");
+const { spawnSync } = require("child_process");
 
-let createCanvas, registerFont;
+let createCanvas;
 try {
-  ({ createCanvas, registerFont } = require("canvas"));
+  ({ createCanvas } = require("canvas"));
 } catch (e) {
   console.error("\n[!] Modul 'canvas' belum terpasang.");
-  console.error("    Di Termux jalankan:");
-  console.error("      pkg install python make clang binutils");
-  console.error("      pkg install libcairo libjpeg-turbo libgif libpangocairo");
-  console.error("      npm install");
-  console.error("    Lalu coba lagi: node render.js zanzibar.json\n");
+  console.error("    npm install canvas  (setelah deps sistem terpasang)\n");
   process.exit(1);
 }
 
@@ -39,11 +31,11 @@ const FPS = meta.fps || 30;
 const TOTAL_FRAMES = Math.round((meta.durasiTotal || 30) * FPS);
 
 const OUT_DIR = path.join(process.cwd(), "frames");
-const OUT_MP4 = path.join(process.cwd(), "output", `${(meta.judul || "video").replace(/\s+/g, "-").toLowerCase()}.mp4`);
+const safeTitle = (meta.judul || "video").replace(/[^\w\-]+/g, "-").replace(/-+/g, "-").toLowerCase();
+const OUT_MP4 = path.join(process.cwd(), "output", `${safeTitle}.mp4`);
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.mkdirSync(path.dirname(OUT_MP4), { recursive: true });
-
 for (const f of fs.readdirSync(OUT_DIR)) {
   if (f.endsWith(".png")) fs.unlinkSync(path.join(OUT_DIR, f));
 }
@@ -52,15 +44,9 @@ console.log(`\n▶  ${meta.judul || "Video"}`);
 console.log(`   ${W}×${H}  |  ${FPS} fps  |  ${meta.durasiTotal}s  |  ${TOTAL_FRAMES} frames`);
 console.log(`   Scene: ${scenes.length}  |  Subtitle: ${subtitles.length}\n`);
 
-function lerp(a, b, t) { return a + (b - a) * t; }
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 function easeInOut(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
-function hexToRgb(hex) {
-  const h = hex.replace("#", "");
-  const n = parseInt(h.length === 3 ? h.split("").map((c) => c + c).join("") : h, 16);
-  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
-}
 
 function makeStars(count, seed) {
   const stars = [];
@@ -71,13 +57,19 @@ function makeStars(count, seed) {
   }
   return stars;
 }
-
 function makeEmbers(count, seed) {
   const list = [];
   let s = seed;
   const rnd = () => { s = (s * 48271) % 2147483647; return (s - 1) / 2147483646; };
   for (let i = 0; i < count; i++) {
-    list.push({ x: W * 0.15 + rnd() * W * 0.7, y: H * 0.35 + rnd() * H * 0.45, r: 2 + rnd() * 8, speed: 0.4 + rnd() * 1.8, phase: rnd() * Math.PI * 2, hue: 15 + rnd() * 40 });
+    list.push({
+      x: W * 0.15 + rnd() * W * 0.7,
+      y: H * 0.35 + rnd() * H * 0.45,
+      r: 2 + rnd() * 8,
+      speed: 0.4 + rnd() * 1.8,
+      phase: rnd() * Math.PI * 2,
+      hue: 15 + rnd() * 40,
+    });
   }
   return list;
 }
@@ -93,15 +85,14 @@ function embersFor(id) {
   return emberCache.get(id);
 }
 
-function drawSky(ctx, scene, localT, globalT) {
+function drawSky(ctx, scene, globalT) {
   const g = scene.background?.gradient || ["#0A1020", "#04060C"];
   const grd = ctx.createLinearGradient(0, 0, 0, H);
   grd.addColorStop(0, g[0]);
   grd.addColorStop(1, g[1] || g[0]);
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, W, H);
-  const stars = starsFor(scene.id);
-  for (const st of stars) {
+  for (const st of starsFor(scene.id)) {
     const tw = 0.5 + 0.5 * Math.sin(globalT * 2.2 + st.tw);
     ctx.beginPath();
     ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
@@ -115,7 +106,7 @@ function drawSky(ctx, scene, localT, globalT) {
   ctx.fillRect(0, 0, W, H);
 }
 
-function drawBuilding(ctx, scene, localT, globalT) {
+function drawBuilding(ctx, scene) {
   const g = scene.background?.gradient || ["#162033", "#080B12"];
   const grd = ctx.createLinearGradient(0, 0, 0, H);
   grd.addColorStop(0, g[0]);
@@ -124,7 +115,10 @@ function drawBuilding(ctx, scene, localT, globalT) {
   ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = "rgba(8,10,18,0.92)";
   const baseY = H * 0.62;
-  const buildings = [[0.05, 0.22, 0.28], [0.18, 0.14, 0.38], [0.30, 0.20, 0.32], [0.48, 0.16, 0.42], [0.62, 0.24, 0.26], [0.78, 0.15, 0.36], [0.90, 0.18, 0.30]];
+  const buildings = [
+    [0.05, 0.22, 0.28], [0.18, 0.14, 0.38], [0.30, 0.20, 0.32],
+    [0.48, 0.16, 0.42], [0.62, 0.24, 0.26], [0.78, 0.15, 0.36], [0.90, 0.18, 0.30],
+  ];
   for (const [xR, wR, hR] of buildings) {
     const x = xR * W, w = wR * W, h = hR * H;
     ctx.fillRect(x, baseY - h, w, h + (H - baseY));
@@ -144,7 +138,7 @@ function drawBuilding(ctx, scene, localT, globalT) {
   ctx.fillRect(0, baseY, W, H - baseY);
 }
 
-function drawFire(ctx, scene, localT, globalT) {
+function drawFire(ctx, scene, globalT) {
   const grd = ctx.createLinearGradient(0, 0, 0, H);
   grd.addColorStop(0, "#1A0A08");
   grd.addColorStop(0.45, "#2A1008");
@@ -157,8 +151,7 @@ function drawFire(ctx, scene, localT, globalT) {
   fireGlow.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = fireGlow;
   ctx.fillRect(0, 0, W, H);
-  const embers = embersFor(scene.id);
-  for (const e of embers) {
+  for (const e of embersFor(scene.id)) {
     const life = (globalT * e.speed + e.phase) % 3;
     const y = e.y - life * 90;
     const a = clamp(1 - life / 3, 0, 1) * 0.9;
@@ -189,11 +182,11 @@ function drawTextBg(ctx, scene) {
   ctx.fillRect(0, 0, W, H);
 }
 
-function drawSceneBackground(ctx, scene, localT, globalT) {
+function drawSceneBackground(ctx, scene, globalT) {
   switch (scene.type) {
-    case "sky": drawSky(ctx, scene, localT, globalT); break;
-    case "building": drawBuilding(ctx, scene, localT, globalT); break;
-    case "fire": drawFire(ctx, scene, localT, globalT); break;
+    case "sky": drawSky(ctx, scene, globalT); break;
+    case "building": drawBuilding(ctx, scene); break;
+    case "fire": drawFire(ctx, scene, globalT); break;
     default: drawTextBg(ctx, scene); break;
   }
 }
@@ -205,75 +198,116 @@ function wrapText(ctx, text, maxWidth) {
     let line = "";
     for (const w of words) {
       const test = line ? line + " " + w : w;
-      if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = w; }
-      else line = test;
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = w;
+      } else line = test;
     }
     if (line) lines.push(line);
   }
   return lines;
 }
 
-function drawSceneText(ctx, scene, localT, duration) {
+function roundRect(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+function drawSceneText(ctx, scene, localT, duration, alphaMul) {
   if (!scene.text?.content) return;
-  const fadeIn = Math.min(duration * 0.25, 0.7);
-  const fadeOut = Math.min(duration * 0.2, 0.6);
+  const fadeIn = Math.min(duration * 0.22, 0.65);
+  const fadeOut = Math.min(duration * 0.18, 0.55);
   let alpha = 1;
   if (localT < fadeIn) alpha = easeOutCubic(localT / fadeIn);
   else if (localT > duration - fadeOut) alpha = easeOutCubic((duration - localT) / fadeOut);
-  alpha = clamp(alpha, 0, 1);
-  const rise = (1 - alpha) * 18;
+  alpha = clamp(alpha * alphaMul, 0, 1);
+  if (alpha < 0.02) return;
+
+  const rise = (1 - alpha) * 22;
   const size = scene.text.size || 48;
   const color = scene.text.color || "#FFFFFF";
-  const xPct = (scene.text.x ?? 50) / 100;
-  const yPct = (scene.text.y ?? 50) / 100;
+  const yPct = clamp((scene.text.y ?? 42) / 100, 0.34, 0.48);
+
   ctx.save();
   ctx.globalAlpha = alpha;
   ctx.font = `700 ${size}px system-ui, -apple-system, "Segoe UI", sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  const lines = wrapText(ctx, scene.text.content, W * 0.82);
-  const lineH = size * 1.25;
+
+  const lines = wrapText(ctx, scene.text.content, W * 0.84);
+  const lineH = size * 1.28;
   const totalH = lines.length * lineH;
-  const cx = W * xPct;
+  const cx = W / 2;
   const cy = H * yPct - totalH / 2 + lineH / 2 + rise;
-  ctx.fillStyle = "rgba(0,0,0,0.55)";
-  lines.forEach((ln, i) => ctx.fillText(ln, cx + 2, cy + i * lineH + 3));
+
+  ctx.fillStyle = "rgba(0,0,0,0.65)";
+  lines.forEach((ln, i) => ctx.fillText(ln, cx + 3, cy + i * lineH + 4));
   ctx.fillStyle = color;
   lines.forEach((ln, i) => ctx.fillText(ln, cx, cy + i * lineH));
   ctx.restore();
 }
 
 function drawSubtitles(ctx, timeSec) {
-  const active = subtitles.filter((s) => timeSec >= s.start && timeSec < s.end);
+  const active = subtitles
+    .filter((s) => timeSec >= s.start && timeSec < s.end)
+    .sort((a, b) => a.start - b.start);
+
   if (!active.length) return;
-  const text = active.map((s) => s.text).join(" ");
+
+  const item = active[active.length - 1];
+  const text = String(item.text || "").trim();
+  if (!text) return;
+
+  const mid = (item.start + item.end) / 2;
+  const half = Math.max(0.05, (item.end - item.start) / 2);
+  const dist = Math.abs(timeSec - mid);
+  let alpha = 1;
+  if (dist > half * 0.75) {
+    alpha = clamp(1 - (dist - half * 0.75) / (half * 0.25), 0, 1);
+  }
+
+  const fontSize = 40;
   ctx.save();
-  ctx.font = `600 36px system-ui, -apple-system, "Segoe UI", sans-serif`;
+  ctx.globalAlpha = alpha;
+  ctx.font = `600 ${fontSize}px system-ui, -apple-system, "Segoe UI", sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  const padX = 28, padY = 16;
-  const tw = ctx.measureText(text).width;
-  const th = 36;
-  const bx = W / 2 - tw / 2 - padX;
-  const by = H * 0.88 - th / 2 - padY;
-  const bw = tw + padX * 2;
-  const bh = th + padY * 2;
-  ctx.fillStyle = "rgba(0,0,0,0.62)";
-  roundRect(ctx, bx, by, bw, bh, 14);
-  ctx.fill();
-  ctx.fillStyle = "#FFFFFF";
-  ctx.fillText(text, W / 2, H * 0.88);
-  ctx.restore();
-}
 
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
+  const lines = wrapText(ctx, text, W * 0.78).slice(0, 2);
+  const lineH = fontSize * 1.3;
+  const textW = Math.max(...lines.map((l) => ctx.measureText(l).width), 0);
+  const padX = 36;
+  const padY = 18;
+  const bw = Math.min(W * 0.9, textW + padX * 2);
+  const bh = lines.length * lineH + padY * 2;
+  const bx = (W - bw) / 2;
+  const by = H * 0.905 - bh / 2;
+
+  const vg = ctx.createLinearGradient(0, H * 0.78, 0, H);
+  vg.addColorStop(0, "rgba(0,0,0,0)");
+  vg.addColorStop(1, "rgba(0,0,0,0.45)");
+  ctx.fillStyle = vg;
+  ctx.fillRect(0, H * 0.78, W, H * 0.22);
+
+  ctx.fillStyle = "rgba(0,0,0,0.72)";
+  roundRect(ctx, bx, by, bw, bh, 18);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(255,255,255,0.08)";
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, bx, by, bw, bh, 18);
+  ctx.stroke();
+
+  const cy = by + padY + lineH / 2;
+  ctx.fillStyle = "#FFFFFF";
+  lines.forEach((ln, i) => ctx.fillText(ln, W / 2, cy + i * lineH));
+  ctx.restore();
 }
 
 function sceneOpacity(scene, timeSec) {
@@ -289,7 +323,10 @@ function sceneOpacity(scene, timeSec) {
 }
 
 function activeScenes(timeSec) {
-  return scenes.map((sc) => ({ scene: sc, opacity: sceneOpacity(sc, timeSec) })).filter((x) => x.opacity > 0.01);
+  return scenes
+    .map((sc) => ({ scene: sc, opacity: sceneOpacity(sc, timeSec) }))
+    .filter((x) => x.opacity > 0.01)
+    .sort((a, b) => a.opacity - b.opacity);
 }
 
 function renderFrame(frameIndex) {
@@ -298,28 +335,25 @@ function renderFrame(frameIndex) {
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = "#000";
   ctx.fillRect(0, 0, W, H);
+
   const active = activeScenes(timeSec);
+
   for (const { scene, opacity } of active) {
-    const localT = timeSec - scene.start;
     const layer = createCanvas(W, H);
     const lctx = layer.getContext("2d");
-    drawSceneBackground(lctx, scene, localT, timeSec);
-    drawSceneText(lctx, scene, localT, scene.duration);
+    drawSceneBackground(lctx, scene, timeSec);
     ctx.globalAlpha = opacity;
     ctx.drawImage(layer, 0, 0);
     ctx.globalAlpha = 1;
   }
-  drawSubtitles(ctx, timeSec);
-  if (frameIndex % 2 === 0) {
-    ctx.globalAlpha = 0.03;
-    for (let i = 0; i < 120; i++) {
-      const x = Math.random() * W;
-      const y = Math.random() * H;
-      ctx.fillStyle = Math.random() > 0.5 ? "#fff" : "#000";
-      ctx.fillRect(x, y, 1.5, 1.5);
-    }
-    ctx.globalAlpha = 1;
+
+  if (active.length) {
+    const top = active[active.length - 1];
+    const localT = timeSec - top.scene.start;
+    drawSceneText(ctx, top.scene, localT, top.scene.duration, top.opacity);
   }
+
+  drawSubtitles(ctx, timeSec);
   return canvas;
 }
 
@@ -341,11 +375,17 @@ async function main() {
   }
   console.log("\n");
   console.log("▶  Menggabungkan frame → MP4 (ffmpeg)…");
-  const ff = spawnSync("ffmpeg", ["-y", "-framerate", String(FPS), "-i", path.join(OUT_DIR, "frame_%05d.png"), "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-preset", "medium", "-movflags", "+faststart", OUT_MP4], { encoding: "utf8" });
+  const crf = process.env.RENDER_CRF || "18";
+  const ff = spawnSync(
+    "ffmpeg",
+    ["-y", "-framerate", String(FPS), "-i", path.join(OUT_DIR, "frame_%05d.png"),
+      "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", String(crf),
+      "-preset", "medium", "-movflags", "+faststart", OUT_MP4],
+    { encoding: "utf8" }
+  );
   if (ff.status !== 0) {
     console.error("\n[!] ffmpeg gagal:");
     console.error(ff.stderr || ff.stdout);
-    console.error("\nPastikan ffmpeg terpasang: pkg install ffmpeg\n");
     process.exit(1);
   }
   const sec = ((Date.now() - t0) / 1000).toFixed(1);
