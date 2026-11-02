@@ -12,12 +12,12 @@ import { Naskah } from "@/engine/types";
 import { nanoid } from "nanoid";
 
 const IconDownload = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
   </svg>
 );
 const IconUpload = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
   </svg>
 );
@@ -27,8 +27,8 @@ const IconPlus = () => (
   </svg>
 );
 const IconFilm = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="2.18" /><line x1="7" y1="2" x2="7" y2="22" /><line x1="17" y1="2" x2="17" y2="22" /><line x1="2" y1="12" x2="22" y2="12" /><line x1="2" y1="7" x2="7" y2="7" /><line x1="2" y1="17" x2="7" y2="17" /><line x1="17" y1="17" x2="22" y2="17" /><line x1="17" y1="7" x2="22" y2="7" />
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="2.18" /><line x1="7" y1="2" x2="7" y2="22" /><line x1="17" y1="2" x2="17" y2="22" /><line x1="2" y1="12" x2="22" y2="12" />
   </svg>
 );
 
@@ -102,262 +102,254 @@ export default function Page() {
   const durationInFrames = Math.round(naskah.meta.durasiTotal * naskah.meta.fps);
 
   return (
-    <div className="layout">
+    <div className="app">
       <header className="topbar">
         <div className="brand">
           <span className="brand-icon"><IconFilm /></span>
           <div className="brand-text">
-            <span className="brand-title">Video Compose</span>
-            <span className="brand-sub">Dashboard</span>
+            <strong>Video Compose</strong>
+            <span>Dashboard</span>
           </div>
         </div>
-        <div className="actions">
-          <label className="btn btn-ghost">
+        <div className="top-actions">
+          <label className="btn">
             <IconUpload />
-            <span>Import</span>
+            <span className="btn-label">Import</span>
             <input type="file" accept=".json" hidden onChange={handleImport} />
           </label>
-          <button className="btn btn-ghost" onClick={handleExport}>
+          <button className="btn" onClick={handleExport}>
             <IconDownload />
-            <span>Export</span>
+            <span className="btn-label">Export</span>
           </button>
         </div>
       </header>
 
-      <div className="body">
-        <main className="main animate-in">
-          <div className="meta-row">
+      <div className="content">
+        <section className="main">
+          <div className="title-row">
             <input
               className="title-input"
               value={naskah.meta.judul}
               onChange={(e) => updateMeta({ judul: e.target.value })}
               placeholder="Judul naskah…"
             />
-            <div className="meta-badges">
-              <span className="badge">{naskah.meta.width}×{naskah.meta.height}</span>
-              <span className="badge">{naskah.meta.fps} fps</span>
-              <span className="badge">{naskah.meta.durasiTotal}s</span>
+            <div className="badges">
+              <span>{naskah.meta.width}×{naskah.meta.height}</span>
+              <span>{naskah.meta.fps}fps</span>
+              <span>{naskah.meta.durasiTotal}s</span>
             </div>
           </div>
 
-          <div className="player-card">
-            <div className="player-wrap">
-              <Player
-                ref={playerRef}
-                component={PreviewComposition}
-                inputProps={{ naskah }}
-                durationInFrames={durationInFrames}
-                fps={naskah.meta.fps}
-                compositionWidth={naskah.meta.width}
-                compositionHeight={naskah.meta.height}
-                style={{ width: "100%", maxHeight: "52vh" }}
-              />
-            </div>
+          <div className="player-box">
+            <Player
+              ref={playerRef}
+              component={PreviewComposition}
+              inputProps={{ naskah }}
+              durationInFrames={durationInFrames}
+              fps={naskah.meta.fps}
+              compositionWidth={naskah.meta.width}
+              compositionHeight={naskah.meta.height}
+              style={{ width: "100%", height: "100%" }}
+            />
           </div>
 
-          <div className="timeline-section">
-            <div className="section-header">
-              <div className="section-title">
-                <span>Timeline</span>
-                <span className="count">{naskah.scenes.length} scene</span>
+          <div className="timeline-box">
+            <div className="timeline-head">
+              <div className="timeline-title">
+                Timeline
+                <span className="pill">{naskah.scenes.length} scene</span>
               </div>
-              <button className="btn btn-sm btn-accent" onClick={handleAddScene}>
+              <button className="btn btn-accent" onClick={handleAddScene}>
                 <IconPlus />
-                <span>Tambah scene</span>
+                <span>Tambah</span>
               </button>
             </div>
             <Timeline currentFrame={currentFrame} onSeek={handleSeek} />
           </div>
-        </main>
+        </section>
 
-        <aside className="sidebar animate-in" style={{ animationDelay: "80ms" }}>
-          <div className="sidebar-section">
-            <div className="sidebar-label">Properties</div>
+        <aside className="side">
+          <div className="side-block">
+            <h3 className="side-label">Properties</h3>
             <SceneEditor />
           </div>
-          <div className="sidebar-divider" />
-          <div className="sidebar-section">
-            <div className="sidebar-label">Render</div>
+          <div className="side-sep" />
+          <div className="side-block">
+            <h3 className="side-label">Render</h3>
             <RenderPanel />
           </div>
         </aside>
       </div>
 
       <style jsx>{`
-        .layout {
+        .app {
           display: flex;
           flex-direction: column;
+          min-height: 100vh;
           height: 100vh;
-          background:
-            radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139, 92, 246, 0.12), transparent),
-            var(--bg);
+          background: var(--bg);
+          overflow: hidden;
         }
+
         .topbar {
+          flex-shrink: 0;
+          height: 52px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 20px;
-          height: 56px;
+          padding: 0 16px;
           border-bottom: 1px solid var(--border);
-          background: rgba(12, 12, 18, 0.8);
-          backdrop-filter: blur(12px);
-          position: sticky;
-          top: 0;
-          z-index: 50;
+          background: var(--bg-elevated);
+          z-index: 20;
         }
         .brand {
           display: flex;
           align-items: center;
           gap: 10px;
+          min-width: 0;
         }
         .brand-icon {
+          flex-shrink: 0;
+          width: 30px;
+          height: 30px;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 32px;
-          height: 32px;
-          border-radius: 9px;
-          background: linear-gradient(135deg, var(--accent), var(--accent-2));
+          border-radius: 8px;
+          background: linear-gradient(135deg, #8b5cf6, #6366f1);
           color: #fff;
-          box-shadow: 0 0 16px var(--accent-glow);
         }
         .brand-text {
           display: flex;
           flex-direction: column;
-          line-height: 1.2;
+          line-height: 1.15;
+          min-width: 0;
         }
-        .brand-title {
+        .brand-text strong {
+          font-size: 13.5px;
           font-weight: 650;
-          font-size: 14px;
-          letter-spacing: -0.01em;
+          white-space: nowrap;
         }
-        .brand-sub {
-          font-size: 11px;
-          color: var(--text-muted);
-          font-weight: 500;
-        }
-        .actions {
-          display: flex;
-          gap: 8px;
-        }
-        .btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          border: 1px solid var(--border-strong);
-          border-radius: var(--radius-sm);
-          padding: 7px 12px;
-          font-size: 12.5px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.18s ease;
-          background: var(--surface-2);
-          color: var(--text);
-        }
-        .btn:hover {
-          background: var(--surface-3);
-          border-color: rgba(255,255,255,0.14);
-          transform: translateY(-1px);
-        }
-        .btn:active {
-          transform: translateY(0);
-        }
-        .btn-ghost {
-          background: transparent;
-        }
-        .btn-ghost:hover {
-          background: var(--surface-2);
-        }
-        .btn-accent {
-          background: linear-gradient(135deg, var(--accent), var(--accent-2));
-          border: none;
-          color: #fff;
-          box-shadow: 0 2px 12px var(--accent-glow);
-        }
-        .btn-accent:hover {
-          filter: brightness(1.1);
-          box-shadow: 0 4px 18px var(--accent-glow);
-        }
-        .btn-sm {
-          padding: 6px 10px;
-          font-size: 12px;
-        }
-        .body {
-          display: flex;
-          flex: 1;
-          overflow: hidden;
-        }
-        .main {
-          flex: 1;
-          padding: 20px 24px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 18px;
-        }
-        .meta-row {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-        }
-        .title-input {
-          background: transparent;
-          border: none;
-          color: var(--text);
-          font-size: 22px;
-          font-weight: 650;
-          letter-spacing: -0.02em;
-          flex: 1;
-          outline: none;
-          padding: 4px 0;
-          border-bottom: 1px solid transparent;
-          transition: border-color 0.2s;
-        }
-        .title-input:focus {
-          border-bottom-color: var(--accent);
-        }
-        .title-input::placeholder {
+        .brand-text span {
+          font-size: 10.5px;
           color: var(--text-muted);
         }
-        .meta-badges {
+        .top-actions {
           display: flex;
           gap: 6px;
           flex-shrink: 0;
         }
-        .badge {
-          font-size: 11px;
+
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          height: 32px;
+          padding: 0 10px;
+          border-radius: 8px;
+          border: 1px solid var(--border-strong);
+          background: var(--surface-2);
+          color: var(--text);
+          font-size: 12px;
           font-weight: 500;
+          cursor: pointer;
+          transition: background 0.15s, border-color 0.15s;
+          white-space: nowrap;
+        }
+        .btn:hover {
+          background: var(--surface-3);
+          border-color: rgba(255,255,255,0.14);
+        }
+        .btn-accent {
+          background: linear-gradient(135deg, #8b5cf6, #6366f1);
+          border: none;
+          color: #fff;
+        }
+        .btn-accent:hover {
+          filter: brightness(1.1);
+        }
+
+        .content {
+          flex: 1;
+          display: grid;
+          grid-template-columns: 1fr 320px;
+          grid-template-rows: 1fr;
+          min-height: 0;
+          overflow: hidden;
+        }
+
+        .main {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          padding: 16px;
+          min-width: 0;
+          min-height: 0;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+
+        .title-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-shrink: 0;
+        }
+        .title-input {
+          flex: 1;
+          min-width: 0;
+          background: transparent;
+          border: none;
+          outline: none;
+          color: var(--text);
+          font-size: 18px;
+          font-weight: 650;
+          letter-spacing: -0.02em;
+          padding: 2px 0;
+        }
+        .title-input::placeholder {
+          color: var(--text-muted);
+        }
+        .badges {
+          display: flex;
+          gap: 5px;
+          flex-shrink: 0;
+        }
+        .badges span {
+          font-size: 11px;
           color: var(--text-dim);
           background: var(--surface-2);
           border: 1px solid var(--border);
           border-radius: 20px;
-          padding: 3px 10px;
-          letter-spacing: 0.01em;
+          padding: 2px 8px;
+          white-space: nowrap;
         }
-        .player-card {
-          border-radius: var(--radius-lg);
+
+        .player-box {
+          flex-shrink: 0;
+          width: 100%;
+          max-width: 280px;
+          aspect-ratio: 9 / 16;
+          margin: 0 auto;
+          border-radius: 14px;
           overflow: hidden;
           border: 1px solid var(--border);
           background: #000;
-          box-shadow: var(--shadow);
+          box-shadow: 0 8px 32px rgba(0,0,0,0.45);
         }
-        .player-wrap {
-          display: flex;
-          justify-content: center;
-          background: linear-gradient(180deg, #0a0a10 0%, #000 100%);
-        }
-        .timeline-section {
+
+        .timeline-box {
+          flex-shrink: 0;
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 8px;
         }
-        .section-header {
+        .timeline-head {
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
-        .section-title {
+        .timeline-title {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -365,38 +357,81 @@ export default function Page() {
           font-weight: 600;
           color: var(--text-dim);
         }
-        .count {
+        .pill {
           font-size: 11px;
           font-weight: 500;
           color: var(--text-muted);
           background: var(--surface-2);
           border-radius: 10px;
-          padding: 2px 8px;
+          padding: 1px 7px;
         }
-        .sidebar {
-          width: 340px;
-          border-left: 1px solid var(--border);
-          background: var(--bg-elevated);
-          overflow-y: auto;
-          flex-shrink: 0;
+
+        .side {
           display: flex;
           flex-direction: column;
+          border-left: 1px solid var(--border);
+          background: var(--bg-elevated);
+          min-height: 0;
+          overflow-y: auto;
+          overflow-x: hidden;
         }
-        .sidebar-section {
-          padding: 16px;
+        .side-block {
+          padding: 14px 16px;
         }
-        .sidebar-label {
-          font-size: 11px;
-          font-weight: 600;
+        .side-label {
+          font-size: 10.5px;
+          font-weight: 650;
           text-transform: uppercase;
-          letter-spacing: 0.06em;
+          letter-spacing: 0.07em;
           color: var(--text-muted);
-          margin-bottom: 12px;
+          margin: 0 0 12px;
         }
-        .sidebar-divider {
+        .side-sep {
           height: 1px;
           background: var(--border);
           margin: 0 16px;
+          flex-shrink: 0;
+        }
+
+        @media (max-width: 860px) {
+          .content {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            overflow-y: auto;
+          }
+          .main {
+            overflow: visible;
+          }
+          .side {
+            border-left: none;
+            border-top: 1px solid var(--border);
+            overflow: visible;
+          }
+          .player-box {
+            max-width: 220px;
+          }
+          .btn-label {
+            display: none;
+          }
+          .title-input {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .topbar {
+            padding: 0 12px;
+          }
+          .main {
+            padding: 12px;
+            gap: 10px;
+          }
+          .player-box {
+            max-width: 180px;
+          }
+          .badges {
+            display: none;
+          }
         }
       `}</style>
     </div>
