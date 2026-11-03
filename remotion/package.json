@@ -6,7 +6,6 @@
     "studio": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts Virga out/virga.mp4",
     "render:virga": "remotion render src/index.ts Virga out/virga.mp4",
-    "render:zanzibar": "remotion render src/index.ts Zanzibar out/zanzibar.mp4",
     "render:preview": "remotion render src/index.ts Virga out/virga-preview.mp4 --scale=0.5"
   },
   "dependencies": {
