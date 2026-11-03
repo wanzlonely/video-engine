@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "studio": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts Virga out/virga.mp4",
+    "render": "remotion render src/index.ts Floresiensis out/floresiensis.mp4",
+    "render:floresiensis": "remotion render src/index.ts Floresiensis out/floresiensis.mp4",
     "render:virga": "remotion render src/index.ts Virga out/virga.mp4",
-    "render:preview": "remotion render src/index.ts Virga out/virga-preview.mp4 --scale=0.5"
+    "render:preview": "remotion render src/index.ts Floresiensis out/floresiensis-preview.mp4 --scale=0.5"
   },
   "dependencies": {
     "@remotion/cli": "4.0.540",

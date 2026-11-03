@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       composition:
-        description: "Composition id (Virga atau Zanzibar)"
+        description: "Composition id (Floresiensis atau Virga)"
         required: true
-        default: "Virga"
+        default: "Floresiensis"
       quality:
         description: "CRF (lebih kecil = lebih bagus)"
         required: false
@@ -19,15 +19,12 @@ jobs:
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-
       - name: Install dependencies
         working-directory: remotion
         run: npm install
-
       - name: Render video
         working-directory: remotion
         run: |
@@ -36,7 +33,6 @@ jobs:
           npx remotion render src/index.ts "$COMP" "out/${COMP}.mp4" \
             --codec=h264 \
             --crf=${{ inputs.quality }}
-
       - name: Upload MP4
         uses: actions/upload-artifact@v4
         with:
@@ -44,8 +40,3 @@ jobs:
           path: remotion/out/*.mp4
           if-no-files-found: error
           retention-days: 14
-
-      - name: Summary
-        run: |
-          echo "## Remotion Render Selesai" >> $GITHUB_STEP_SUMMARY
-          ls -lah remotion/out/ >> $GITHUB_STEP_SUMMARY || true
